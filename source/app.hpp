@@ -2,6 +2,7 @@
 #include "gtkmm/grid.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
+#include <exception>
 #include <gtkmm.h>
 #include <iomanip>
 #include <iostream>
@@ -181,20 +182,29 @@ private:
       return pixbuf->scale_simple(new_width, new_height, Gdk::INTERP_BILINEAR);
     }
 
-    return pixbuf; // no scaling needed
+    return pixbuf;
   }
 
   std::string get_position() {
     std::string pos_str = exec("playerctl position");
-    if (pos_str.length() == 0)
+    double pos;
+
+    try {
+      pos = std::stod(pos_str);
+    } catch (const std::exception &e) {
       return "";
-    double pos = std::stod(pos_str);
+    }
 
     std::string len_str = exec("playerctl metadata mpris:length");
-    long long len_micro = std::stoll(len_str);
+    long long len_micro = 0;
+    try {
+      len_micro = std::stoll(len_str);
+    } catch (const std::exception &e) {
+      return "";
+    }
+
     double len_sec = len_micro / 1'000'000.0;
 
-    // Convert to int seconds
     int pos_sec = static_cast<int>(pos);
     int len_sec_int = static_cast<int>(len_sec);
 
