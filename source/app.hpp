@@ -1,4 +1,5 @@
 #include "gtkmm/button.h"
+#include "gtkmm/enums.h"
 #include "gtkmm/grid.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
@@ -9,8 +10,8 @@
 #include <string>
 #include <thread>
 
-#define MAX_WIDTH 100
-#define MAX_HEIGHT 100
+#define MAX_WIDTH 200
+#define MAX_HEIGHT 200
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 180
@@ -37,9 +38,13 @@ public:
 
     grid.attach(status, 0, 0);
     grid.attach(title, 1, 0);
-    grid.attach(artist, 1, 1);
-    grid.attach(position, 2, 0);
-    grid.attach(image, 3, 0, 2, 2);
+    grid.attach(position, 1, 1);
+    grid.attach(artist, 2, 0);
+    image.set_halign(Gtk::ALIGN_START);
+
+    grid.attach(image, 1, 4, 4, 4);
+
+    // (1, 2) (1,2)
 
     previous.signal_clicked().connect(sigc::bind(
         sigc::mem_fun(*this, &Loki::on_button_click), PlayerAction::Previous));
@@ -49,12 +54,12 @@ public:
     playPause.signal_clicked().connect(sigc::bind(
         sigc::mem_fun(*this, &Loki::on_button_click), PlayerAction::PlayPause));
     playPause.set_label("Play/Pause");
-    grid.attach(playPause, 1, 4);
+    grid.attach(playPause, 0, 5);
 
     next.signal_clicked().connect(sigc::bind(
         sigc::mem_fun(*this, &Loki::on_button_click), PlayerAction::Next));
     next.set_label("Next");
-    grid.attach(next, 2, 4);
+    grid.attach(next, 0, 6);
 
     add(grid);
     show_all_children();
