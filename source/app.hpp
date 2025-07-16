@@ -1,6 +1,4 @@
-#include "gtkmm/box.h"
 #include "gtkmm/button.h"
-#include "gtkmm/enums.h"
 #include "gtkmm/grid.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
@@ -188,6 +186,8 @@ private:
 
   std::string get_position() {
     std::string pos_str = exec("playerctl position");
+    if (pos_str.length() == 0)
+      return "";
     double pos = std::stod(pos_str);
 
     std::string len_str = exec("playerctl metadata mpris:length");
@@ -216,7 +216,7 @@ private:
     std::string result;
     FILE *pipe = popen(cmd, "r");
     if (!pipe)
-      throw std::runtime_error("popen() failed!");
+      return "";
 
     while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
       result += buffer.data();
@@ -224,7 +224,7 @@ private:
 
     auto returnCode = pclose(pipe);
     if (returnCode != 0) {
-      // You can handle non-zero exit status here
+      return "";
     }
 
     if (!result.empty() && result.back() == '\n') {
