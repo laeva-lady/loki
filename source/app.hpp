@@ -42,7 +42,7 @@ public:
     grid.attach(artist, 2, 0);
     image.set_halign(Gtk::ALIGN_START);
 
-    grid.attach(image, 1, 4, 4, 4);
+    grid.attach(image, 1, 4, 3, 3);
 
     // (1, 2) (1,2)
 
@@ -113,7 +113,7 @@ private:
       }
     }
 
-    return true; // return true to keep the timeout active
+    return true;
   }
 
   void load_image_async(const std::string &path, int max_w, int max_h) {
